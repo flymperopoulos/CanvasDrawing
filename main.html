@@ -29,48 +29,53 @@
 
 window.addEventListener("load",run,false);
 
+
+function run () {
+   var c = document.getElementById("canvas-q1");
+   var ctx = c.getContext("2d");
+   question1(ctx);
+}
+
 /************************************************************
  *
  * Question 1
  * 
  ************************************************************/
 
-function run () {
-   var c = document.getElementById("canvas-q1");
-   var ctx = c.getContext("2d");
-   var padding = 20;
-   var canvas_length = 500;
-   var canvas_width = 500;
-   var phone_length = 400;
-   var phone_width = 200;
-   var button_height = 10;
-   var button_width = 45;
-   var centered_phone_X = (canvas_width/2)-phone_width/2;
-   var centered_phone_Y = (canvas_length/2)-phone_length/2;
-   var centered_button_X = centered_phone_X+(phone_width/2-button_width/2);
-   var bottom_position_button_Y = centered_phone_Y+(phone_length-button_height-padding/1.5);
-   var bottom_position_speaker_Y = centered_phone_Y+padding/1.5;
-   var speaker_height = 5;
-   var screen_position_X = centered_phone_X+padding/2;
-   var screen_position_Y = centered_phone_Y+padding*2;
-   var lock_button_X = centered_phone_X+phone_width;
-   var lock_button_Y = centered_phone_Y+phone_length/4;
-   var lock_button_length = 45;
-   var lock_button_width = 3;
+function question1(ctx){
+	var padding = 20;
+	var canvas_length = 500;
+	var canvas_width = 500;
+	var phone_length = 400;
+	var phone_width = 200;
+	var button_height = 10;
+	var button_width = 45;
+	var centered_phone_X = (canvas_width/2)-phone_width/2;
+	var centered_phone_Y = (canvas_length/2)-phone_length/2;
+	var centered_button_X = centered_phone_X+(phone_width/2-button_width/2);
+	var bottom_position_button_Y = centered_phone_Y+(phone_length-button_height-padding/1.5);
+	var bottom_position_speaker_Y = centered_phone_Y+padding/1.5;
+	var speaker_height = 5;
+	var screen_position_X = centered_phone_X+padding/2;
+	var screen_position_Y = centered_phone_Y+padding*2;
+	var lock_button_X = centered_phone_X+phone_width;
+	var lock_button_Y = centered_phone_Y+phone_length/4;
+	var lock_button_length = 45;
+	var lock_button_width = 3;
 
-   // frame of phone
-   wireFrame(centered_phone_X, centered_phone_Y, phone_length, phone_width, 35, ctx);
-   // home button
-   wireFrame(centered_button_X, bottom_position_button_Y, button_height, button_width, 5, ctx);
-   // screen
-   wireFrame(screen_position_X, screen_position_Y, phone_length-4*padding, phone_width-padding, 4, ctx);
-   // microphone
-   wireFrame(centered_button_X, bottom_position_speaker_Y, speaker_height, button_width, 3, ctx);
-   // lock button
-   wireFrame(lock_button_X, lock_button_Y, lock_button_length, lock_button_width, 2, ctx);
+	// frame of phone
+	wireFrame_q1(centered_phone_X, centered_phone_Y, phone_length, phone_width, 35, ctx);
+	// home button
+	wireFrame_q1(centered_button_X, bottom_position_button_Y, button_height, button_width, 5, ctx);
+	// screen
+	wireFrame_q1(screen_position_X, screen_position_Y, phone_length-4*padding, phone_width-padding, 4, ctx);
+	// microphone
+	wireFrame_q1(centered_button_X, bottom_position_speaker_Y, speaker_height, button_width, 3, ctx);
+	// lock button
+	wireFrame_q1(lock_button_X, lock_button_Y, lock_button_length, lock_button_width, 2, ctx);
 }
 
-function wireFrame(startX, startY, length, width, curve, ctx){
+function wireFrame_q1(startX, startY, length, width, curve, ctx){
 	ctx.beginPath();
 	ctx.moveTo(startX+curve, startY);
 	ctx.lineTo(startX+(width-curve), startY);
@@ -83,7 +88,6 @@ function wireFrame(startX, startY, length, width, curve, ctx){
 	ctx.quadraticCurveTo(startX, startY, startX+curve, startY);
 	ctx.stroke();
 }
-
 
 /************************************************************
  *
