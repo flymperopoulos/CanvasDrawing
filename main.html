@@ -34,6 +34,10 @@ function run () {
    var c = document.getElementById("canvas-q1");
    var ctx = c.getContext("2d");
    question1(ctx);
+   var c2 = document.getElementById("canvas-q2");
+   var ctx2 = c2.getContext("2d");
+
+   draw(ctx2, 100, 100, letterHMoves)
 }
 
 /************************************************************
@@ -96,6 +100,36 @@ function wireFrame_q1(startX, startY, length, width, curve, ctx){
  ************************************************************/
 
 // the moves for drawing letter H, for debugging
+function draw(ctx, x, y, moves){
+	ctx.beginPath();
+	ctx.moveTo(x, y);
+	var i;
+	var angle = 0;
+	var current_x = x;
+	var current_y = y;
+	
+	for (i = 0; i < moves.length; i=i+2){
+		var value = moves[i+1];
+		switch (moves[i]){
+			case "f":
+				var final_x = Math.cos(angle/180*Math.PI)*value+ current_x;
+				var final_y = Math.sin(angle/180*Math.PI)*value + current_y;
+				ctx.lineTo(final_x, final_y);
+				current_x = final_x;
+				current_y = final_y;
+				break;
+			case "r":
+				angle = angle + value;
+				break;
+			case "l":
+				angle = angle - value;
+				break;
+			default:
+				console.log("invalid arguments in the list");
+		}
+	}
+	ctx.stroke();
+}
 
 var letterHMoves = ["f",40,
 		    "r",90,
