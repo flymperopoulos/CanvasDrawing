@@ -34,6 +34,7 @@ function run () {
    var c = document.getElementById("canvas-q1");
    var ctx = c.getContext("2d");
    question1(ctx);
+   innerArt(ctx);
 }
 
 /************************************************************
@@ -62,20 +63,34 @@ function question1(ctx){
 	var lock_button_Y = centered_phone_Y+phone_length/4;
 	var lock_button_length = 45;
 	var lock_button_width = 3;
+	var camera_position_one = centered_button_X+button_width+11;
+	var triangle_center_top_X = canvas_width/2;
+	var triangle_center_top_Y = canvas_length/2 - centered_phone_Y;
+	var triangle_width = 100;
+	var triangle_height = 100;
+
+	var grd;
 
 	// frame of phone
-	wireFrame_q1(centered_phone_X, centered_phone_Y, phone_length, phone_width, 35, ctx);
+	wireFrame_q1(centered_phone_X, centered_phone_Y, phone_length, phone_width, 35, "#323232", "#b2b2b2", ctx);
 	// home button
-	wireFrame_q1(centered_button_X, bottom_position_button_Y, button_height, button_width, 5, ctx);
+	wireFrame_q1(centered_button_X, bottom_position_button_Y, button_height, button_width, 5, "#323232", "#cccccc",ctx);
 	// screen
-	wireFrame_q1(screen_position_X, screen_position_Y, phone_length-4*padding, phone_width-padding, 4, ctx);
-	// microphone
-	wireFrame_q1(centered_button_X, bottom_position_speaker_Y, speaker_height, button_width, 3, ctx);
+	wireFrame_q1(screen_position_X, screen_position_Y, phone_length-4*padding, phone_width-padding, 4, "white","white", ctx);
+	// speaker
+	wireFrame_q1(centered_button_X, bottom_position_speaker_Y, speaker_height, button_width, 3, "#323232", "#cccccc" ,ctx);
 	// lock button
-	wireFrame_q1(lock_button_X, lock_button_Y, lock_button_length, lock_button_width, 2, ctx);
+	wireFrame_q1(lock_button_X, lock_button_Y, lock_button_length, lock_button_width, 2, "#323232", "#cccccc",ctx);
+	// cameras
+	wireFrame_q1(camera_position_one, bottom_position_speaker_Y, speaker_height, speaker_height, 3, "#323232", "#cccccc",ctx);
+	wireFrame_q1(camera_position_one+10, bottom_position_speaker_Y, speaker_height, speaker_height, 3, "#323232", "#cccccc",ctx);
+
+	// inner triangle
+	innerArt(triangle_center_top_X, triangle_center_top_Y, triangle_width, triangle_height, grd, ["#8ED6FF","#004CB3"], canvas_length, canvas_width, ctx);
+
 }
 
-function wireFrame_q1(startX, startY, length, width, curve, ctx){
+function wireFrame_q1(startX, startY, length, width, curve, fillColor, strokeColor, ctx){
 	ctx.beginPath();
 	ctx.moveTo(startX+curve, startY);
 	ctx.lineTo(startX+(width-curve), startY);
@@ -86,7 +101,25 @@ function wireFrame_q1(startX, startY, length, width, curve, ctx){
 	ctx.quadraticCurveTo(startX, startY+length, startX, startY+(length-curve));
 	ctx.lineTo(startX, startY+curve);
 	ctx.quadraticCurveTo(startX, startY, startX+curve, startY);
+	ctx.fillStyle = fillColor;
+	ctx.strokeStyle = strokeColor;
+	ctx.fill();
 	ctx.stroke();
+}
+
+function innerArt(x, y, triangle_width,triangle_height, grd, colors, canvas_length, canvas_width, ctx){
+	ctx.beginPath();
+
+	ctx.moveTo(x, y);
+	ctx.lineTo(x + triangle_width / 2, y + triangle_height);
+	ctx.lineTo(x - triangle_width / 2, y + triangle_height);
+	ctx.closePath();
+	grd = ctx.createLinearGradient(canvas_width/3, x/8, triangle_width/5, y - triangle_height);
+
+	grd.addColorStop(0, colors[0]); // light blue
+	grd.addColorStop(1, colors[1]); // dark blue
+	ctx.fillStyle = grd;
+	ctx.fill();
 }
 
 /************************************************************
