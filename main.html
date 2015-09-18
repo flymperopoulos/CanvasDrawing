@@ -31,13 +31,18 @@ window.addEventListener("load",run,false);
 
 
 function run () {
-   var c = document.getElementById("canvas-q1");
-   var ctx = c.getContext("2d");
-   question1(ctx);
+   var c1 = document.getElementById("canvas-q1");
+   var ctx1 = c1.getContext("2d");
+   question1(ctx1);
    var c2 = document.getElementById("canvas-q2");
    var ctx2 = c2.getContext("2d");
 
    draw(ctx2, 100, 100, letterHMoves)
+
+   var c3 = document.getElementById("canvas-q3");
+   var ctx3 = c3.getContext("2d");
+
+   var interval = window.setInterval(question3(ctx3, question1), 500);
 }
 
 /************************************************************
@@ -54,8 +59,8 @@ function question1(ctx){
 	var phone_width = 200;
 	var button_height = 10;
 	var button_width = 45;
-	var centered_phone_X = (canvas_width/2)-phone_width/2;
-	var centered_phone_Y = (canvas_length/2)-phone_length/2;
+	var centered_phone_X = 0;
+	var centered_phone_Y = 0;
 	var centered_button_X = centered_phone_X+(phone_width/2-button_width/2);
 	var bottom_position_button_Y = centered_phone_Y+(phone_length-button_height-padding/1.5);
 	var bottom_position_speaker_Y = centered_phone_Y+padding/1.5;
@@ -107,6 +112,7 @@ function draw(ctx, x, y, moves){
 	var angle = 0;
 	var current_x = x;
 	var current_y = y;
+	var on_page = true;
 	
 	for (i = 0; i < moves.length; i=i+2){
 		var value = moves[i+1];
@@ -114,7 +120,11 @@ function draw(ctx, x, y, moves){
 			case "f":
 				var final_x = Math.cos(angle/180*Math.PI)*value+ current_x;
 				var final_y = Math.sin(angle/180*Math.PI)*value + current_y;
-				ctx.lineTo(final_x, final_y);
+				if (on_page){
+					ctx.lineTo(final_x, final_y);
+				} else {
+					ctx.moveTo(final_x, final_y);
+				}
 				current_x = final_x;
 				current_y = final_y;
 				break;
@@ -124,11 +134,26 @@ function draw(ctx, x, y, moves){
 			case "l":
 				angle = angle - value;
 				break;
+			case "pu":
+				on_page = false;
+				break;
+			case "pd":
+				on_page = true;
+				break;
 			default:
 				console.log("invalid arguments in the list");
 		}
 	}
 	ctx.stroke();
+}
+
+function question3(ctx, func){
+	var i;
+	ctx.clearRect(0, 0, 500, 500);
+	ctx.translate(125, 125);
+	ctx.rotate(20*Math.PI/180);
+	func(ctx);
+
 }
 
 var letterHMoves = ["f",40,
