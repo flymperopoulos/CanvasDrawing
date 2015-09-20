@@ -29,10 +29,42 @@
 
 window.addEventListener("load",run,false);
 
+// global variables
+var padding = 20;
+var canvas_length = 500;
+var canvas_width = 500;
+var phone_length = 400;
+var phone_width = 200;
+var button_height = 10;
+var button_width = 45;
+var centered_phone_X = (canvas_width/2)-phone_width/2;
+var centered_phone_Y = (canvas_length/2)-phone_length/2;
+var centered_button_X = centered_phone_X+(phone_width/2-button_width/2);
+var bottom_position_button_Y = centered_phone_Y+(phone_length-button_height-padding/1.5);
+var bottom_position_speaker_Y = centered_phone_Y+padding/1.5;
+var speaker_height = 5;
+var screen_position_X = centered_phone_X+padding/2;
+var screen_position_Y = centered_phone_Y+padding*2;
+var lock_button_X = centered_phone_X+phone_width;
+var lock_button_Y = centered_phone_Y+phone_length/4;
+var lock_button_length = 45;
+var lock_button_width = 3;
+var camera_position_one = centered_button_X+button_width+11;
+var triangle_center_top_X = canvas_width/2;
+var triangle_center_top_Y = canvas_length/2 - centered_phone_Y;
+var triangle_width = 100;
+var triangle_height = 100;
+var gradient1 = 9361151;
+var gradient2 = 19635;
+var countx = 1;
+var county = 1;
 
+var grd;
 function run () {
+
    var c1 = document.getElementById("canvas-q1");
    var ctx1 = c1.getContext("2d");
+
    question1(ctx1);
    var c2 = document.getElementById("canvas-q2");
    var ctx2 = c2.getContext("2d");
@@ -42,8 +74,9 @@ function run () {
    var c3 = document.getElementById("canvas-q3");
    var ctx3 = c3.getContext("2d");
 
-   var interval = window.setInterval(question3(ctx3, question1), 500);
+   setInterval(function () {question3(ctx3, phone)}, 50);
 }
+
 
 /************************************************************
  *
@@ -52,32 +85,15 @@ function run () {
  ************************************************************/
 
 function question1(ctx){
-	var padding = 20;
-	var canvas_length = 500;
-	var canvas_width = 500;
-	var phone_length = 400;
-	var phone_width = 200;
-	var button_height = 10;
-	var button_width = 45;
-	var centered_phone_X = 0;
-	var centered_phone_Y = 0;
-	var centered_button_X = centered_phone_X+(phone_width/2-button_width/2);
-	var bottom_position_button_Y = centered_phone_Y+(phone_length-button_height-padding/1.5);
-	var bottom_position_speaker_Y = centered_phone_Y+padding/1.5;
-	var speaker_height = 5;
-	var screen_position_X = centered_phone_X+padding/2;
-	var screen_position_Y = centered_phone_Y+padding*2;
-	var lock_button_X = centered_phone_X+phone_width;
-	var lock_button_Y = centered_phone_Y+phone_length/4;
-	var lock_button_length = 45;
-	var lock_button_width = 3;
-	var camera_position_one = centered_button_X+button_width+11;
-	var triangle_center_top_X = canvas_width/2;
-	var triangle_center_top_Y = canvas_length/2 - centered_phone_Y;
-	var triangle_width = 100;
-	var triangle_height = 100;
 
-	var grd;
+	phone(ctx);
+
+	// inner triangle
+	innerArt(triangle_center_top_X, triangle_center_top_Y, triangle_width, triangle_height, grd, ["#8ED6FF","#004CB3"], canvas_length, canvas_width, ctx);
+
+}
+// function for drawing the phone
+function phone(ctx){
 
 	// frame of phone
 	wireFrame_q1(centered_phone_X, centered_phone_Y, phone_length, phone_width, 35, "#323232", "#b2b2b2", ctx);
@@ -92,10 +108,6 @@ function question1(ctx){
 	// cameras
 	wireFrame_q1(camera_position_one, bottom_position_speaker_Y, speaker_height, speaker_height, 3, "#323232", "#cccccc",ctx);
 	wireFrame_q1(camera_position_one+10, bottom_position_speaker_Y, speaker_height, speaker_height, 3, "#323232", "#cccccc",ctx);
-
-	// inner triangle
-	innerArt(triangle_center_top_X, triangle_center_top_Y, triangle_width, triangle_height, grd, ["#8ED6FF","#004CB3"], canvas_length, canvas_width, ctx);
-
 }
 
 function wireFrame_q1(startX, startY, length, width, curve, fillColor, strokeColor, ctx){
@@ -122,12 +134,13 @@ function innerArt(x, y, triangle_width,triangle_height, grd, colors, canvas_leng
 	ctx.lineTo(x + triangle_width / 2, y + triangle_height);
 	ctx.lineTo(x - triangle_width / 2, y + triangle_height);
 	ctx.closePath();
-	grd = ctx.createLinearGradient(canvas_width/3, x/8, triangle_width/5, y - triangle_height);
+	grd = ctx.createLinearGradient(canvas_width, x/3, triangle_width/5, y - triangle_height);
 
 	grd.addColorStop(0, colors[0]); // light blue
 	grd.addColorStop(1, colors[1]); // dark blue
 	ctx.fillStyle = grd;
 	ctx.fill();
+	ctx.stroke();
 }
 
 /************************************************************
@@ -179,13 +192,30 @@ function draw(ctx, x, y, moves){
 	ctx.stroke();
 }
 
-function question3(ctx, func){
-	var i;
-	ctx.clearRect(0, 0, 500, 500);
-	ctx.translate(125, 125);
-	ctx.rotate(20*Math.PI/180);
-	func(ctx);
+/************************************************************
+ *
+ * Question 3
+ * 
+ ************************************************************/
 
+// animates the inside triangle
+function question3(ctx, func){
+	ctx.clearRect(0, 0, 500, 500);
+	
+	func(ctx);
+	innerArt(triangle_center_top_X, triangle_center_top_Y, triangle_width, triangle_height, grd, [ "#" + gradient1.toString(16),"#00" + gradient2.toString(16)], canvas_length, canvas_width, ctx);
+
+	if (triangle_center_top_X >= 290 -5 || triangle_center_top_Y >= screen_position_Y + phone_length-4*padding - triangle_height -5){
+		countx = -1* Math.floor(Math.random() * 5)+1;
+		county = -1* Math.floor(Math.random() * 5)+1;
+	} else if (triangle_center_top_X <= 210 + 5 || triangle_center_top_Y <= screen_position_Y + 5){
+		countx = Math.floor(Math.random() * 5) +1;
+		county = Math.floor(Math.random() * 5) +1;
+	}
+	gradient1 += countx;
+	gradient2 += county;
+	triangle_center_top_X += countx;
+	triangle_center_top_Y += county;
 }
 
 var letterHMoves = ["f",40,
@@ -212,18 +242,5 @@ var letterHMoves = ["f",40,
 		    "r",90,
 		    "f",100];
 
-
-
-/************************************************************
- *
- * Question 3
- * 
- ************************************************************/
-
-
   </script>
-
-  
-
-
 </body><div></div><div></div></html>
