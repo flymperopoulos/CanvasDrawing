@@ -69,7 +69,8 @@ function run () {
    var c2 = document.getElementById("canvas-q2");
    var ctx2 = c2.getContext("2d");
 
-   draw(ctx2, 100, 100, letterHMoves)
+   // draw(ctx2, 100, 100, letterHMoves)
+   drawKochFlake(ctx2, 3);
 
    var c3 = document.getElementById("canvas-q3");
    var ctx3 = c3.getContext("2d");
@@ -190,6 +191,42 @@ function draw(ctx, x, y, moves){
 		}
 	}
 	ctx.stroke();
+}
+
+
+function drawKochFlake(ctx, iteration){
+	
+	// start triangle when iteration is 0
+	var kochDirection = "frfrf"
+	var kochMoveList = []
+	var temp = []
+
+	for (var i = 0; i < iteration; i++) {
+		// everytime we increase iteration each forward turns into flfrflf
+		// string regex makes replacing very easy
+		kochDirection = kochDirection.replace(/f/g, "flfrflf")
+	}
+    
+    // now that we have all of the directions, we need to convert the string into the moveList that draw can consume
+    for (var i = 0; i < kochDirection.length; i++) {
+    	switch (kochDirection[i]){
+    		case "f":
+	    		kochMoveList.push("f");
+	    		kochMoveList.push(100 / Math.pow(3, (iteration - 1)));
+	    		break;
+    		case "l":
+	    		kochMoveList.push("l");
+	    		kochMoveList.push(60);
+	    		break;
+    		case "r":
+	    		kochMoveList.push("r");
+	    		kochMoveList.push(120);
+	    		break;
+	    	default:
+	    		console.log("invalid arguments in the list");
+	    }
+	}
+    draw(ctx, 100, 100, kochMoveList)
 }
 
 /************************************************************
